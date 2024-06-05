@@ -13,7 +13,6 @@
 		42D1CA742C10FE0F0035A7A9 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 42D1CA732C10FE0F0035A7A9 /* Base */; };
 		42D1CA762C10FE110035A7A9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42D1CA752C10FE110035A7A9 /* Assets.xcassets */; };
 		42D1CA792C10FE110035A7A9 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 42D1CA782C10FE110035A7A9 /* Base */; };
-		42D1CA812C11027D0035A7A9 /* ScrollingImagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D1CA802C11027D0035A7A9 /* ScrollingImagesViewController.swift */; };
 		E2DCD903DAB6049AA4B80CDD /* Pods_Secret_Album.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E3C9D85829EC6C5A48F07F3 /* Pods_Secret_Album.framework */; };
 /* End PBXBuildFile section */
 
@@ -29,7 +28,6 @@
 		42D1CA752C10FE110035A7A9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		42D1CA782C10FE110035A7A9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		42D1CA7A2C10FE110035A7A9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		42D1CA802C11027D0035A7A9 /* ScrollingImagesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollingImagesViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,7 +70,6 @@
 				42D1CA752C10FE110035A7A9 /* Assets.xcassets */,
 				42D1CA772C10FE110035A7A9 /* LaunchScreen.storyboard */,
 				42D1CA7A2C10FE110035A7A9 /* Info.plist */,
-				42D1CA802C11027D0035A7A9 /* ScrollingImagesViewController.swift */,
 			);
 			path = Secret_Album;
 			sourceTree = "<group>";
@@ -209,7 +206,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				42D1CA812C11027D0035A7A9 /* ScrollingImagesViewController.swift in Sources */,
 				42D1CA712C10FE0F0035A7A9 /* ViewController.swift in Sources */,
 				42D1CA6D2C10FE0F0035A7A9 /* AppDelegate.swift in Sources */,
 				42D1CA6F2C10FE0F0035A7A9 /* SceneDelegate.swift in Sources */,
