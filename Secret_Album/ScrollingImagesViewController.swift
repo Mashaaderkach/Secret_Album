@@ -13,6 +13,10 @@ private extension CGFloat {
     static let buttonsRightInset: CGFloat = 20
     static let buttonsHeight: CGFloat = 40
     static let buttonsWidth: CGFloat = 40
+    static let datePickerHeight: CGFloat = 100
+    static let datePickerWidth: CGFloat = 160
+    static let textLabelHeight: CGFloat = 100
+    static let textLabelWidth: CGFloat = 170
 }
 
 class ScrollingImagesViewController: UIViewController {
@@ -35,14 +39,9 @@ class ScrollingImagesViewController: UIViewController {
         let backButton = UIButton()
         backButton.setTitle("< Back", for: .normal)
         backButton.setTitleColor(.black, for: .normal)
+        backButton.setTitleColor(.black, for: .normal)
         return backButton
     }()
-    
-    
-    
-    
-    
-    
     
     let thirdContainer: UIView = {
         let thirdContainer = UIView()
@@ -62,17 +61,14 @@ class ScrollingImagesViewController: UIViewController {
         return secondContainer
     }()
     
-    let textLabel: UILabel = {
-        let textLabel = UILabel()
-        textLabel.textColor = UIColor.black
-        textLabel.text = "Some text about mountains"
-        textLabel.textAlignment = .center
-        textLabel.font = UIFont.systemFont(ofSize: 20, weight: .medium)
-        return textLabel
+    let descriptionTextLabel: UILabel = {
+        let descriptionTextLabel = UILabel()
+        descriptionTextLabel.textColor = UIColor.black
+        descriptionTextLabel.text = "Some text about mountains"
+        descriptionTextLabel.textAlignment = .center
+        descriptionTextLabel.font = UIFont.systemFont(ofSize: 20, weight: .medium)
+        return descriptionTextLabel
     }()
-    
-    
-    
     
     let firstContainer: UIView = {
         let firstContainer = UIView()
@@ -104,8 +100,24 @@ class ScrollingImagesViewController: UIViewController {
         return likeButton
     }()
     
+    private let datePicker: UIDatePicker = {
+        let datePicker = UIDatePicker()
+        datePicker.datePickerMode = .dateAndTime
+        datePicker.addTarget(self, action: #selector(datePickerValueChanged(_:)), for: .valueChanged)
+        return datePicker
+    }()
+    
+    private var dateTextLabel: UILabel = {
+        let dateTextLabel = UILabel()
+        dateTextLabel.font = UIFont.systemFont(ofSize: 15, weight: .bold)
+        dateTextLabel.textColor = .lightGray
+        dateTextLabel.textAlignment = .center
+        return dateTextLabel
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
         view.backgroundColor = .white
         
         setZeroUIView()
@@ -116,11 +128,14 @@ class ScrollingImagesViewController: UIViewController {
         
         
         setSecondUIView()
-        setTextLabel()
+        setDescriptionTextLabel()
         setFirstUIView()
         addLeftButton()
         addRightButton()
         addLikeButton()
+        
+        addDateTextLabel()
+        addDatePicker()
     }
     
     
@@ -130,7 +145,7 @@ class ScrollingImagesViewController: UIViewController {
         
         zeroContainer.snp.makeConstraints { make in
             make.top.left.right.equalToSuperview().offset(0)
-            make.height.equalTo(100)
+            make.height.equalTo(80)
         }
     }
     
@@ -152,7 +167,7 @@ class ScrollingImagesViewController: UIViewController {
         view.addSubview(thirdContainer)
         
         thirdContainer.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(100)
+            make.top.equalTo(zeroContainer.snp.bottom).offset(0)
             make.left.right.equalToSuperview().offset(0)
             make.height.equalTo(550)
         }
@@ -173,22 +188,46 @@ class ScrollingImagesViewController: UIViewController {
         view.addSubview(secondContainer)
         
         secondContainer.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(650)
+            make.top.equalTo(thirdContainer.snp.bottom).offset(0)
             make.left.right.equalToSuperview().offset(0)
-            make.height.equalTo(100)
+            make.height.equalTo(135)
         }
     }
     
-    func setTextLabel() {
-        secondContainer.addSubview(textLabel)
+    func setDescriptionTextLabel() {
+        secondContainer.addSubview(descriptionTextLabel)
         
-        textLabel.snp.makeConstraints { make in
-            make.top.equalTo(secondContainer).offset(25)
+        descriptionTextLabel.snp.makeConstraints { make in
+            make.top.equalTo(secondContainer).offset(10)
             make.left.equalTo(secondContainer).offset(25)
             make.right.equalTo(secondContainer).offset(-25)
-            make.height.equalTo(50)
+            make.height.equalTo(30)
         }
         
+    }
+    
+    private func addDateTextLabel() {
+        secondContainer.addSubview(dateTextLabel)
+        dateTextLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(secondContainer)
+            make.centerX.equalToSuperview()
+            make.width.equalTo(CGFloat.textLabelWidth)
+            make.height.equalTo(CGFloat.textLabelHeight)
+        }
+    }
+    
+    private func addDatePicker() {
+        secondContainer.addSubview(datePicker)
+        datePicker.snp.makeConstraints { make in
+            make.top.equalTo(secondContainer).offset(50)
+            make.centerX.equalToSuperview()
+            make.width.equalTo(CGFloat.datePickerWidth)
+            make.height.equalTo(CGFloat.datePickerHeight)
+        }
+        let action = UIAction { _ in
+            
+        }
+        datePicker.addAction(action, for: .touchUpInside)
     }
     
     
@@ -196,9 +235,9 @@ class ScrollingImagesViewController: UIViewController {
         view.addSubview(firstContainer)
         
         firstContainer.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(750)
-            make.left.right.equalToSuperview().offset(0)
-            make.height.equalTo(102)
+            make.top.equalTo(secondContainer.snp.bottom).offset(0)
+            make.left.right.bottom.equalToSuperview().offset(0)
+//            make.height.equalTo(102)
         }
     }
     
@@ -207,7 +246,7 @@ class ScrollingImagesViewController: UIViewController {
         firstContainer.addSubview(leftButton)
         
         leftButton.snp.makeConstraints { make in
-            make.top.equalTo(firstContainer).offset(25)
+            make.centerY.equalTo(firstContainer)
             make.left.equalTo(firstContainer).offset(25)
             make.height.equalTo(50)
         }
@@ -222,7 +261,7 @@ class ScrollingImagesViewController: UIViewController {
         firstContainer.addSubview(rightButton)
         
         rightButton.snp.makeConstraints { make in
-            make.top.equalTo(firstContainer).offset(25)
+            make.centerY.equalTo(firstContainer)
             make.left.equalTo(leftButton).offset(300)
             make.right.equalTo(firstContainer).offset(-25)
             make.height.equalTo(50)
@@ -238,13 +277,18 @@ class ScrollingImagesViewController: UIViewController {
         firstContainer.addSubview(likeButton)
         
         likeButton.snp.makeConstraints { make in
-            make.top.equalTo(firstContainer).offset(25)
+            make.centerY.equalTo(firstContainer)
             make.centerX.equalTo(firstContainer)
             make.height.equalTo(50)
         }
     }
     
-    
+    @objc func datePickerValueChanged(_ sender: UIDatePicker) {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd / MMM / yyyy HH:mm"
+        let dateString = formatter.string(from: sender.date)
+        dateTextLabel.text = dateString
+    }
     
    
     
