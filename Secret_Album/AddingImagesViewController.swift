@@ -126,17 +126,17 @@ class AddingImagesViewController: UIViewController {
     
     func setMainContainer() {
         view.addSubview(mainContainer)
+        
         mainContainer.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
-            make.height.equalTo(screenHeight) // Задаем высоту containerView такой же, как высота экрана
-            make.bottom.equalToSuperview()
+            make.top.bottom.equalToSuperview()
         }
     }
     
     func setZeroUIView() {
-        view.addSubview(zeroContainer)
+        mainContainer.addSubview(zeroContainer)
         
-        mainContainer.snp.makeConstraints { make in
+        zeroContainer.snp.makeConstraints { make in
             make.top.left.right.equalToSuperview().offset(0)
             make.height.equalTo(100)
         }
