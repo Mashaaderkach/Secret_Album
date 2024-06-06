@@ -8,14 +8,14 @@
 import UIKit
 import SnapKit
 
-class AddingImagesViewController: UIViewController {
+class AddingImagesViewController: UIViewController, UIImagePickerControllerDelegate & UINavigationControllerDelegate {
     
     let screenHeight = UIScreen.main.bounds.height
     private var keyboardHeight: CGFloat = 0
     
     private let mainContainer: UIView = {
         let mainContainer = UIView()
-        mainContainer.backgroundColor = .green
+        mainContainer.backgroundColor = .clear
         return mainContainer
     }()
     
@@ -27,7 +27,7 @@ class AddingImagesViewController: UIViewController {
     
     private let backButton: UIButton = {
         let backButton = UIButton()
-        backButton.setTitle("< Back", for: .normal)
+        backButton.setTitle("Back", for: .normal)
         backButton.setTitleColor(.black, for: .normal)
         return backButton
     }()
@@ -40,8 +40,16 @@ class AddingImagesViewController: UIViewController {
     
     private let imageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.backgroundColor = .systemGray
+        imageView.backgroundColor = UIColor(red: 255/255, green: 242/255, blue: 204/255, alpha: 1.0)
         return imageView
+    }()
+    
+    private let plusButton: UIButton = {
+        let plusButton = UIButton()
+        plusButton.setTitle("+", for: .normal)
+        plusButton.setTitleColor(.lightGray, for: .normal)
+        plusButton.titleLabel?.font = UIFont.systemFont(ofSize: 150, weight: .medium)
+        return plusButton
     }()
     
     private let secondContainer: UIView = {
@@ -79,12 +87,14 @@ class AddingImagesViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .lightGray
+        view.backgroundColor = UIColor(red: 255/255, green: 229/255, blue: 153/255, alpha: 1.0)
         setMainContainer()
         setZeroUIView()
         addBackButton()
         setThirdUIView()
+        
         setFirstImage()
+        addPlusButton()
         setSecondUIView()
         setTextLabel()
         setFirstUIView()
@@ -138,7 +148,7 @@ class AddingImagesViewController: UIViewController {
         
         zeroContainer.snp.makeConstraints { make in
             make.top.left.right.equalToSuperview().offset(0)
-            make.height.equalTo(100)
+            make.height.equalTo(80)
         }
     }
     
@@ -151,6 +161,7 @@ class AddingImagesViewController: UIViewController {
             make.height.equalTo(50)
         }
         let backButtonAction = UIAction { _ in
+            self.exitAlert()
             self.backButtonPressed()
         }
         backButton.addAction(backButtonAction, for: .touchUpInside)
@@ -160,7 +171,7 @@ class AddingImagesViewController: UIViewController {
         mainContainer.addSubview(thirdContainer)
         
         thirdContainer.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(100)
+            make.top.equalTo(zeroContainer.snp.bottom).offset(0)
             make.left.right.equalToSuperview().offset(0)
             make.height.equalTo(550)
         }
@@ -176,12 +187,28 @@ class AddingImagesViewController: UIViewController {
         }
     }
     
+    func addPlusButton() {
+        thirdContainer.addSubview(plusButton)
+        
+        plusButton.snp.makeConstraints { make in
+            make.centerX.equalTo(thirdContainer)
+            make.centerY.equalTo(thirdContainer)
+            make.width.height.equalTo(100)
+        }
+        
+        let plusButtonAction = UIAction { _ in
+            self.uploadImageAlert()
+        }
+        plusButton.addAction(plusButtonAction, for: .touchUpInside)
+        
+    }
+    
     
     func setSecondUIView() {
         mainContainer.addSubview(secondContainer)
         
         secondContainer.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(650)
+            make.top.equalTo(thirdContainer.snp.bottom).offset(0)
             make.left.right.equalToSuperview().offset(0)
             make.height.equalTo(100)
         }
@@ -207,7 +234,7 @@ class AddingImagesViewController: UIViewController {
         mainContainer.addSubview(firstContainer)
         
         firstContainer.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(750)
+            make.top.equalTo(secondContainer.snp.bottom).offset(0)
             make.left.right.equalToSuperview().offset(0)
             make.bottom.equalTo(mainContainer.snp.bottom).offset(-5)
         }
@@ -223,6 +250,42 @@ class AddingImagesViewController: UIViewController {
         }
     }
     
+    private func uploadImageAlert() {
+        let alert = UIAlertController(title: "Choose the image", message: nil, preferredStyle: .actionSheet)
+        
+        let camera = UIAlertAction(title: "Take a photo", style: .default) { _ in
+            if UIImagePickerController.isSourceTypeAvailable(.camera) {
+                self.showImagePicker(sourceType: .camera)
+            }
+            
+        }
+        alert.addAction(camera)
+       
+        let photoLibrary = UIAlertAction(title: "Upload from Photos", style: .default) { _ in
+            if UIImagePickerController.isSourceTypeAvailable(.camera) {
+                self.showImagePicker(sourceType: .photoLibrary)
+            }
+        }
+        alert.addAction(photoLibrary)
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        alert.addAction(cancelAction)
+        
+        present(alert, animated: true)
+    }
+    
+    private func showImagePicker(sourceType: UIImagePickerController.SourceType) {
+        let imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
+        imagePicker.allowsEditing = true
+        imagePicker.sourceType = sourceType
+        present(imagePicker, animated: true)
+    }
+    
+    private func makePlusButtonClear() {
+        plusButton.setTitleColor(.clear, for: .normal)
+    }
+    
     
     private func backButtonPressed() {
         let controller = ViewController()
@@ -231,12 +294,43 @@ class AddingImagesViewController: UIViewController {
         navigationController?.popViewController(animated: true)
     }
     
+    private func exitAlert() {
+        let alert = UIAlertController(title: "WARNING", message: "Would you like to save or upload files?", preferredStyle: .alert)
+        
+        let saveAction = UIAlertAction(title: "Save", style: .default) { _ in
+            
+        }
+        alert.addAction(saveAction)
+        
+        let loadAction = UIAlertAction(title: "Load", style: .default) { _ in
+            
+        }
+        alert.addAction(loadAction)
+        
+        self.present(alert, animated: true)
+    }
+    
 }
 
 extension Notification.Name { // имя - то, что кричим
     static let changeText = Notification.Name("change Text")
     
     
+}
+
+extension AddingImagesViewController {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        var chosenImage = UIImage()
+        if let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
+            chosenImage = image
+        } else if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            chosenImage = image
+        }
+        
+        imageView.image = chosenImage
+        makePlusButtonClear()
+        picker.dismiss(animated: true)
+    }
 }
 
 extension AddingImagesViewController: UITextFieldDelegate {
@@ -250,4 +344,5 @@ extension AddingImagesViewController: UITextFieldDelegate {
         view.endEditing(true)
     }
 }
+
 
