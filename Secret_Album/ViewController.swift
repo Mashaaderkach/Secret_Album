@@ -40,7 +40,7 @@ class ViewController: UIViewController {
     }
 
     private func configureUI() {
-        view.backgroundColor = .lightGray
+        view.backgroundColor = UIColor(red: 252/255, green: 229/255, blue: 205/255, alpha: 1.0)
         
         view.addSubview(nextButton)
         nextButton.snp.makeConstraints { make in
